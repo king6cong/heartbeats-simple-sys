@@ -10,9 +10,15 @@ fn main() {
         Err(_) => {
             let src = PathBuf::from(concat!(env!("CARGO_MANIFEST_DIR"), "/heartbeats-simple"));
             let mut config = Config::new(&src);
-            let dst: PathBuf = config.build();
+            let dst: PathBuf = config
+                // .define("CMAKE_AR",
+                //         "/Users/cong/ndk-standalone-18-arm/bin/arm-linux-androideabi-ar")
+                .define("CMAKE_RANLIB",
+                        "/Users/cong/ndk-standalone-18-arm/bin/arm-linux-androideabi-ranlib")
+                .build();
             println!("cargo:rustc-link-lib=static=heartbeats-simple");
-            println!("cargo:rustc-link-search=native={}", dst.join("lib").display());
-        },
+            println!("cargo:rustc-link-search=native={}",
+                     dst.join("lib").display());
+        }
     }
 }
